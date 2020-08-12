@@ -17,49 +17,44 @@ public class Main {
     FileInputStream arq2;
     DataInputStream dis;
 
+    byte[] ba;
+
     try {
 
       // * ESCRITA *
       arq = new FileOutputStream("dados/livros.db");
       dos = new DataOutputStream(arq);
+      ba = l1.toByteArray();
+      dos.writeInt(ba.length);
+      arq.write(ba);
 
-      dos.writeInt(l1.idLivro);
-      dos.writeUTF(l1.titulo);
-      dos.writeUTF(l1.autor);
-      dos.writeFloat(l1.preco);
+      ba = l2.toByteArray();
+      dos.writeInt(ba.length);
+      arq.write(ba);
 
-      dos.writeInt(l2.idLivro);
-      dos.writeUTF(l2.titulo);
-      dos.writeUTF(l2.autor);
-      dos.writeFloat(l2.preco);
-
-      dos.writeInt(l3.idLivro);
-      dos.writeUTF(l3.titulo);
-      dos.writeUTF(l3.autor);
-      dos.writeFloat(l3.preco);
-
-      dos.close();
       arq.close();
 
       // * LEITURA *
 
       Livro l4 = new Livro();
-      Livro l5 = new Livro();
+      // Livro l5 = new Livro();
+      int tam;
 
       arq2 = new FileInputStream("dados/livros.db");
       dis = new DataInputStream(arq2);
 
-      l4.idLivro = dis.readInt();
-      l4.titulo = dis.readUTF();
-      l4.autor = dis.readUTF();
-      l4.preco = dis.readFloat();
-      System.out.println(l4);
+      tam = dis.readInt();
+      ba = new byte[tam];
+      dis.read(ba);
+      l3.fromByteArray(ba);
 
-      l5.idLivro = dis.readInt();
-      l5.titulo = dis.readUTF();
-      l5.autor = dis.readUTF();
-      l5.preco = dis.readFloat();
-      System.out.println(l5);
+      tam = dis.readInt();
+      ba = new byte[tam];
+      dis.read(ba);
+      l4.fromByteArray(ba);
+
+      System.out.println(l3);
+      System.out.println(l4);
 
     } catch (Exception e) {
       e.printStackTrace();
